@@ -2,11 +2,14 @@
 
 import SwiftUI
 
+let spriteWorld = SpriteWorld()
+
 @main
 struct SelectionerApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(spriteWorld)
         }
     }
 }

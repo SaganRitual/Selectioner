@@ -11,6 +11,10 @@
 		D40E0E822BED9FE700A622FC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40E0E812BED9FE700A622FC /* ContentView.swift */; };
 		D40E0E842BED9FE900A622FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D40E0E832BED9FE900A622FC /* Assets.xcassets */; };
 		D40E0E872BED9FE900A622FC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D40E0E862BED9FE900A622FC /* Preview Assets.xcassets */; };
+		D40E0E922BEDA4D800A622FC /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40E0E912BEDA4D800A622FC /* Scene.swift */; };
+		D40E0E942BEDA4E800A622FC /* SpriteWorld.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40E0E932BEDA4E800A622FC /* SpriteWorld.swift */; };
+		D40E0E9A2BEDB06200A622FC /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40E0E982BEDB06200A622FC /* String+Extensions.swift */; };
+		D40E0E9B2BEDB06200A622FC /* CoreGraphics+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40E0E992BEDB06200A622FC /* CoreGraphics+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +24,10 @@
 		D40E0E832BED9FE900A622FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D40E0E862BED9FE900A622FC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D40E0E882BED9FE900A622FC /* Selectioner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Selectioner.entitlements; sourceTree = "<group>"; };
+		D40E0E912BEDA4D800A622FC /* Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
+		D40E0E932BEDA4E800A622FC /* SpriteWorld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteWorld.swift; sourceTree = "<group>"; };
+		D40E0E982BEDB06200A622FC /* String+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		D40E0E992BEDB06200A622FC /* CoreGraphics+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CoreGraphics+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,8 +60,10 @@
 		D40E0E7E2BED9FE700A622FC /* Selectioner */ = {
 			isa = PBXGroup;
 			children = (
-				D40E0E7F2BED9FE700A622FC /* SelectionerApp.swift */,
+				D40E0E972BEDB05100A622FC /* Extensions */,
+				D40E0E902BEDA4CA00A622FC /* SpriteArena */,
 				D40E0E812BED9FE700A622FC /* ContentView.swift */,
+				D40E0E7F2BED9FE700A622FC /* SelectionerApp.swift */,
 				D40E0E832BED9FE900A622FC /* Assets.xcassets */,
 				D40E0E882BED9FE900A622FC /* Selectioner.entitlements */,
 				D40E0E852BED9FE900A622FC /* Preview Content */,
@@ -67,6 +77,24 @@
 				D40E0E862BED9FE900A622FC /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		D40E0E902BEDA4CA00A622FC /* SpriteArena */ = {
+			isa = PBXGroup;
+			children = (
+				D40E0E912BEDA4D800A622FC /* Scene.swift */,
+				D40E0E932BEDA4E800A622FC /* SpriteWorld.swift */,
+			);
+			path = SpriteArena;
+			sourceTree = "<group>";
+		};
+		D40E0E972BEDB05100A622FC /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D40E0E992BEDB06200A622FC /* CoreGraphics+Extensions.swift */,
+				D40E0E982BEDB06200A622FC /* String+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,8 +167,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D40E0E9A2BEDB06200A622FC /* String+Extensions.swift in Sources */,
 				D40E0E822BED9FE700A622FC /* ContentView.swift in Sources */,
+				D40E0E942BEDA4E800A622FC /* SpriteWorld.swift in Sources */,
 				D40E0E802BED9FE700A622FC /* SelectionerApp.swift in Sources */,
+				D40E0E922BEDA4D800A622FC /* Scene.swift in Sources */,
+				D40E0E9B2BEDB06200A622FC /* CoreGraphics+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
