@@ -5,10 +5,14 @@ import Foundation
 extension SpriteWorld {
 
     class SWSelectionDelegate: UserInputDelegate {
+        enum DragState {
+            case none, drawingMarquee, draggingObjects
+        }
+
         var scene: SpriteWorld.SWScene!
         var selectionBox: SpriteWorld.SWSelectionBox!
 
-        var isDraggingObjects = false
+        var dragState = DragState.none
         var selectedObjects = [SpriteWorld.SWGremlin]()
 
         func postInit(scene: SpriteWorld.SWScene, selectionBox: SpriteWorld.SWSelectionBox) {
@@ -17,12 +21,25 @@ extension SpriteWorld {
         }
 
         func drag(startVertex: CGPoint, endVertex: CGPoint, shiftKey: Bool = false) {
+            if dragState == .drawingMarquee {
+                // We had already determined that we're just drawing a marquee select;
+                // just keep drawing it
+                selectionBox.drawRubberBand(from: startVertex, to: endVertex)
+                return
+            }
+
+            if dragState == .draggingObjects {
+                // We were already in a drag; just continue it
+                scene.drag(selectedObjects, startVertex: startVertex, endVertex: endVertex)
+                return
+            }
+
             if selectedObjects.isEmpty {
                 // If nothing is currently selected, it's a simple drag
 
-                if let toDrag = getObject(at: endVertex) {
+                if let toDrag = getObject(at: startVertex) {
                     // If the drag starts on top of an object, we're dragging that object
-                    isDraggingObjects = true
+                    dragState = .draggingObjects
 
                     select(toDrag)
                     scene.drag(selectedObjects, startVertex: startVertex, endVertex: endVertex)
@@ -30,19 +47,20 @@ extension SpriteWorld {
                 }
 
                 // If the drag starts in empty space, we're drawing a selection marquee
+                dragState = .drawingMarquee
                 selectionBox.drawRubberBand(from: startVertex, to: endVertex)
                 return
             }
 
             // Something is currently selected
 
-            if let primary = getObject(at: endVertex) {
+            if let primary = getObject(at: startVertex) {
                 // The drag is starting on top of an object
 
                 if primary.isSelected {
                     // If that object is already selected, we're just dragging it and
                     // anything else that's already selected
-                    isDraggingObjects = true
+                    dragState = .draggingObjects
                     scene.drag(selectedObjects, startVertex: startVertex, endVertex: endVertex)
                     return
                 }
@@ -52,7 +70,7 @@ extension SpriteWorld {
                 if shiftKey {
                     // Shift-drag; add the object to whatever is already selected and
                     // drag all selected objects
-                    isDraggingObjects = true
+                    dragState = .draggingObjects
                     select(primary)
                     scene.drag(selectedObjects, startVertex: startVertex, endVertex: endVertex)
                     return
@@ -61,7 +79,7 @@ extension SpriteWorld {
                 // No shift key; deselect everything but the object to be dragged
                 deselectAll()
 
-                isDraggingObjects = true
+                dragState = .draggingObjects
                 select(primary)
                 scene.drag(selectedObjects, startVertex: startVertex, endVertex: endVertex)
                 return
@@ -70,12 +88,18 @@ extension SpriteWorld {
 
             // The drag is starting over empty space; just draw a selection marquee;
             // we'll deal with shift key and deselection at drag-end
+            dragState = .drawingMarquee
             selectionBox.drawRubberBand(from: startVertex, to: endVertex)
         }
 
         func dragEnd(startVertex: CGPoint, endVertex: CGPoint, shiftKey: Bool = false) {
+            defer {
+                scene.dragEnd(selectedObjects)
+                dragState = .none
+            }
+
             if selectedObjects.isEmpty {
-                assert(!isDraggingObjects, "Dragging objects but nothing selected?")
+                assert(dragState != .draggingObjects, "Dragging objects but nothing selected?")
 
                 // Nothing was already selected
 
@@ -102,7 +126,7 @@ extension SpriteWorld {
 
             // Something is currently selected
 
-            if isDraggingObjects {
+            if dragState == .draggingObjects {
                 // We were dragging objects; no change to selection when we're finished
                 return
             }
@@ -123,7 +147,6 @@ extension SpriteWorld {
             }
 
             // User stretched a rubber band around selectable objects
-
             if shiftKey {
                 // If shift key, toggle everything inside the marquee
                 toggleSelect(containedObjects)
@@ -144,7 +167,16 @@ extension SpriteWorld {
             scene.rootNode.children.compactMap {
                 guard let gremlin = $0 as? SpriteWorld.SWGremlin else { return nil }
 
-                return rectangle.contains(gremlin.position) ? gremlin : nil
+                var originInScene = scene.convertPoint(fromView: rectangle.origin)
+                originInScene.y *= -1
+
+                var negativeHeight = rectangle.size
+                negativeHeight.height *= -1
+
+                let rectangleInScene = CGRect(origin: originInScene, size: negativeHeight)
+
+                let c = rectangleInScene.contains(gremlin.position)
+                return c ? gremlin : nil
             }
         }
 
@@ -161,7 +193,10 @@ extension SpriteWorld {
         func tap(at position: CGPoint, shiftKey: Bool = false) {
             guard let tappedObject = getObject(at: position) else {
                 deselectAll()
-                scene.addGremlin(at: position)
+
+                let gremlin = scene.addGremlin(at: position)
+                select(gremlin)
+
                 return
             }
 

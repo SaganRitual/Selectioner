@@ -4,7 +4,7 @@ import SpriteKit
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var appState = AppState()
+    @ObservedObject private var appState = AppState()
 
     // With eternal gratitude to
     // https://forums.developer.apple.com/forums/profile/billh04
@@ -38,12 +38,24 @@ struct ContentView: View {
             }
 
             .gesture(
+                DragGesture().modifiers(.shift)
+                    .onChanged { value in
+                        hoverLocation = value.location
+                        appState.selectioner.drag(startVertex: value.startLocation, endVertex: value.location, shiftKey: true)
+                    }
+                    .onEnded { value in
+                        hoverLocation = value.location
+                        appState.selectioner.dragEnd(startVertex: value.startLocation, endVertex: value.location, shiftKey: true)
+                    }
+            )
+
+            .gesture(
                 DragGesture()
                     .onChanged { value in
                         hoverLocation = value.location
                         appState.selectioner.drag(startVertex: value.startLocation, endVertex: value.location)
                     }
-                    .onEnded   { value in
+                    .onEnded { value in
                         hoverLocation = value.location
                         appState.selectioner.dragEnd(startVertex: value.startLocation, endVertex: value.location)
                     }

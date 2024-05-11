@@ -45,7 +45,7 @@ extension SpriteWorld.SWSystem {
 extension SpriteWorld {
 
     final class SWScene: SKScene {
-        var cameraScale: CGFloat = 0.2
+        var cameraScale: CGFloat = 1
 
         let cameraNode = SKCameraNode()
         let rootNode = SKNode()
@@ -59,16 +59,14 @@ extension SpriteWorld {
         init(selectionDelegate: SWSelectionDelegate) {
             self.selectionDelegate = selectionDelegate
 
-            // Haven't yet figured out why super.init() causes an exception that
-            // says Fatal error: Use of unimplemented initializer 'init(size:)' for class 'Selectioner.SWScene'
-            // Fortunately we can just start with a size of .zero and let SwiftUI set our size later
+            // Still haven't figured out a good way to set the scene size to the same as the view
             super.init(size: .zero)
         }
         
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
-        
+
         override func didMove(to view: SKView) {
             scaleMode = .resizeFill
             backgroundColor = .black
@@ -88,7 +86,7 @@ extension SpriteWorld {
 }
 
 extension SpriteWorld.SWScene {
-    func addGremlin(at position: CGPoint) {
+    func addGremlin(at position: CGPoint) -> SpriteWorld.SWGremlin {
         let coin = [0, 1, 2, 3].randomElement()!
         let spriteNames = ["spaceman", "flapper", "cyclops", "grouch"]
 
@@ -115,6 +113,8 @@ extension SpriteWorld.SWScene {
         simpleSelectionShape.zPosition = gremlin.zPosition - 1
 
         gremlin.addChild(simpleSelectionShape)
+
+        return gremlin
     }
 
     func drag(_ objects: [Selectable], startVertex: CGPoint, endVertex: CGPoint) {
@@ -141,6 +141,8 @@ extension SpriteWorld.SWScene {
             let gremlin = $0 as! SpriteWorld.SWGremlin
             gremlin.startDragPosition = nil
         }
+
+        selectionBox.reset()
     }
 
     func select(_ object: Selectable, yesSelect: Bool = true) {
