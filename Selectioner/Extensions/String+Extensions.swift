@@ -35,7 +35,7 @@ func getMousePositionString(positionInView: CGPoint) -> String {
     return "(\(vx), \(vy))"
 }
 
-func getMousePositionString(forScene scene: SpriteWorld.Scene, positionInView: CGPoint) -> String {
+func getMousePositionString(forScene scene: SpriteWorld.SWScene, positionInView: CGPoint) -> String {
     let positionInScene = scene.convertPoint(fromView: positionInView)
     let sx = String(format: "%.2f", positionInScene.x)
     let sy = String(format: "%.2f", positionInScene.y)

@@ -4,7 +4,7 @@ import SpriteKit
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var spriteWorld: SpriteWorld
+    @StateObject private var swState = SpriteWorld.WorldState()
 
     // With eternal gratitude to
     // https://forums.developer.apple.com/forums/profile/billh04
@@ -12,12 +12,15 @@ struct ContentView: View {
     // https://forums.developer.apple.com/forums/thread/724082
     let glassPaneColor = CGColor(red: 0, green: 0, blue: 0, alpha: 0.01)
 
+    @State private var hoverLocation: CGPoint?
+    @State private var viewSize: CGSize = .zero
+
     var body: some View {
         HStack(alignment: .top) {
             ZStack {
                 SpriteView(
-                    scene: spriteWorld.scene,
-                    debugOptions: [.showsFPS, .showsPhysics, .showsNodeCount]
+                    scene: swState.scene,
+                    debugOptions: [.showsFPS, .showsNodeCount]
                 )
                 
                 Color(cgColor: glassPaneColor)
@@ -25,9 +28,8 @@ struct ContentView: View {
                         GeometryReader { geometry in
                             Path { _ in
                                 DispatchQueue.main.async {
-                                    if spriteWorld.scene.size != geometry.size {
-                                        print("\(geometry.size)")
-                                        spriteWorld.scene.size = geometry.size
+                                    if self.viewSize != geometry.size {
+                                        self.viewSize = geometry.size
                                     }
                                 }
                             }
@@ -38,15 +40,24 @@ struct ContentView: View {
             .gesture(
                 DragGesture()
                     .onChanged { value in
-                        spriteWorld.hoverLocation = value.location
-                        spriteWorld.isHovering = true
-                        print("c(\(value.location)")
+                        hoverLocation = value.location
+                        swState.select.drag(startVertex: value.startLocation, endVertex: value.location)
                     }
                     .onEnded   { value in
-                        spriteWorld.hoverLocation = value.location
-                        spriteWorld.isHovering = false
-                        print("e(\(value.location)")
+                        hoverLocation = value.location
                     }
+            )
+
+            .gesture(
+                TapGesture().modifiers(.shift).onEnded {
+                    swState.select.tap(at: hoverLocation!, shift: true)
+                }
+            )
+
+            .gesture(
+                TapGesture().onEnded {
+                    swState.select.tap(at: hoverLocation!, shift: false)
+                }
             )
 
             // With eternal gratitude to Natalia Panferova
@@ -55,11 +66,9 @@ struct ContentView: View {
             .onContinuousHover { phase in
                 switch phase {
                 case .active(let location):
-                    spriteWorld.hoverLocation = location
-                    spriteWorld.isHovering = true
+                    hoverLocation = location
                 case .ended:
-                    spriteWorld.hoverLocation = .zero
-                    spriteWorld.isHovering = false
+                    hoverLocation = nil
                 }
             }
 
@@ -79,9 +88,9 @@ struct ContentView: View {
                 .padding(.bottom)
                 
                 HStack {
-                    Text("Scene/View")
+                    Text("View/Scene")
                     Spacer()
-                    Text("\(spriteWorld.scene.size)")
+                    Text("\(viewSize)")
                 }
                 .padding(.bottom)
 
@@ -92,22 +101,22 @@ struct ContentView: View {
                 }
                 .padding(.bottom)
 
-                if spriteWorld.isHovering {
+                if hoverLocation == nil {
+                    Text("N/A")
+                        .padding(.bottom, 10 + 16)
+                } else {
                     HStack {
-                        Text("View")
+                        Text("SwiftUI View")
                         Spacer()
-                        Text("\(spriteWorld.hoverLocation)")
+                        Text("\(hoverLocation!)")
                     }
 
                     HStack {
-                        Text("Scene")
+                        Text("SpriteKit Scene")
                         Spacer()
-                        Text("\(spriteWorld.hoverLocation)")
+                        Text("\(swState.scene.convertPoint(fromView: hoverLocation!))")
                     }
                     .padding(.bottom, 10)
-                } else {
-                    Text("N/A")
-                        .padding(.bottom, 10 + 16)
                 }
             }
             .monospaced()
@@ -118,5 +127,4 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .environmentObject(SpriteWorld())
 }
