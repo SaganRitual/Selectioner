@@ -7,6 +7,7 @@ extension SpriteWorld {
 
     final class SWGremlin: SKSpriteNode, Selectable {
         var isSelected: Bool = false
+        var startDragPosition: CGPoint?
     }
 
 }

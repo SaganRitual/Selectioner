@@ -51,13 +51,13 @@ struct ContentView: View {
 
             .gesture(
                 TapGesture().modifiers(.shift).onEnded {
-                    appState.selectioner.tap(at: hoverLocation!, shift: true)
+                    appState.selectioner.tap(at: hoverLocation!, shiftKey: true)
                 }
             )
 
             .gesture(
                 TapGesture().onEnded {
-                    appState.selectioner.tap(at: hoverLocation!, shift: false)
+                    appState.selectioner.tap(at: hoverLocation!, shiftKey: false)
                 }
             )
 

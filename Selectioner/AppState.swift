@@ -5,11 +5,11 @@ import SwiftUI
 
 class AppState: ObservableObject {
     @Published var scene: SpriteWorld.SWScene
-    @Published var selectioner: Selectioner
+    @Published var selectioner: SpriteWorld.SWSelectionDelegate
 
     init() {
-        let selectioner = Selectioner()
-        let scene = SpriteWorld.SWScene(setSelectionStateDelegate: selectioner.setDelegate)
+        let selectioner = SpriteWorld.SWSelectionDelegate()
+        let scene = SpriteWorld.SWScene(selectionDelegate: selectioner)
 
         self.scene = scene
         self.selectioner = selectioner
