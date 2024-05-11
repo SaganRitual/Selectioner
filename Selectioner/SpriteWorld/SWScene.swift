@@ -55,10 +55,10 @@ extension SpriteWorld {
         var selectionBox: SWSelectionBox!
 
         var selectionDelegate: SWSelectionDelegate?
-        let selectionState: SelectionState
+        let setSelectionStateDelegate: (SelectionerDelegate) -> Void
 
-        init(selectionState: SelectionState) {
-            self.selectionState = selectionState
+        init(setSelectionStateDelegate: @escaping (SelectionerDelegate) -> Void) {
+            self.setSelectionStateDelegate = setSelectionStateDelegate
             super.init(size: .zero)
         }
         
@@ -89,12 +89,33 @@ extension SpriteWorld.SWScene {
         let coin = [0, 1, 2, 3].randomElement()!
         let spriteNames = ["spaceman", "flapper", "cyclops", "grouch"]
 
-        let sprite = SKSpriteNode(imageNamed: spriteNames[coin])
+        let gremlin = SpriteWorld.SWGremlin(imageNamed: spriteNames[coin])
 
-        sprite.position = convertPoint(fromView: position)
-        sprite.position.y *= -1
+        gremlin.position = convertPoint(fromView: position)
 
-        rootNode.addChild(sprite)
+        // I still haven't figured this part out; for some reason, SpriteKit's
+        // y-coordinates are inverted relative to the SwiftUI coordinate spaces
+        gremlin.position.y *= -1
+
+        rootNode.addChild(gremlin)
+
+        // Make the selection indicator slightly larger than the gremlin,
+        // so we can put it behind the gremlin (to simplify click detection) and
+        // still see it
+        let simpleSelectionShape = SKShapeNode(circleOfRadius: 1.05 * (gremlin.size.height / 2))
+        simpleSelectionShape.name = "SelectionIndicator"
+        simpleSelectionShape.lineWidth = 1
+        simpleSelectionShape.strokeColor = .white
+        simpleSelectionShape.fillColor = .clear
+        simpleSelectionShape.blendMode = .replace
+        simpleSelectionShape.isHidden = true
+        simpleSelectionShape.zPosition = gremlin.zPosition - 1
+
+        gremlin.addChild(simpleSelectionShape)
+    }
+
+    func select(_ object: Selectable, yesSelect: Bool = true) {
+        (object as! SpriteWorld.SWGremlin).childNode(withName: "SelectionIndicator")!.isHidden = !yesSelect
     }
 }
 
@@ -123,9 +144,11 @@ private extension SpriteWorld.SWScene {
             selectionExtentSprites: selectionExtentSprites
         )
 
-        selectionState.delegate = SpriteWorld.SWSelectionDelegate(
+        selectionDelegate = SpriteWorld.SWSelectionDelegate(
             scene: self, selectionBox: selectionBox
         )
+
+        setSelectionStateDelegate(selectionDelegate!)
     }
 
 }

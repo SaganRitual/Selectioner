@@ -4,7 +4,7 @@ import SpriteKit
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var swState = SpriteWorld.WorldState()
+    @StateObject private var appState = AppState()
 
     // With eternal gratitude to
     // https://forums.developer.apple.com/forums/profile/billh04
@@ -19,7 +19,7 @@ struct ContentView: View {
         HStack(alignment: .top) {
             ZStack {
                 SpriteView(
-                    scene: swState.scene,
+                    scene: appState.scene,
                     debugOptions: [.showsFPS, .showsNodeCount]
                 )
                 
@@ -41,23 +41,23 @@ struct ContentView: View {
                 DragGesture()
                     .onChanged { value in
                         hoverLocation = value.location
-                        swState.select.drag(startVertex: value.startLocation, endVertex: value.location)
+                        appState.selectioner.drag(startVertex: value.startLocation, endVertex: value.location)
                     }
                     .onEnded   { value in
                         hoverLocation = value.location
-                        swState.select.dragEnd(startVertex: value.startLocation, endVertex: value.location)
+                        appState.selectioner.dragEnd(startVertex: value.startLocation, endVertex: value.location)
                     }
             )
 
             .gesture(
                 TapGesture().modifiers(.shift).onEnded {
-                    swState.select.tap(at: hoverLocation!, shift: true)
+                    appState.selectioner.tap(at: hoverLocation!, shift: true)
                 }
             )
 
             .gesture(
                 TapGesture().onEnded {
-                    swState.select.tap(at: hoverLocation!, shift: false)
+                    appState.selectioner.tap(at: hoverLocation!, shift: false)
                 }
             )
 
@@ -115,7 +115,7 @@ struct ContentView: View {
                     HStack {
                         Text("SpriteKit Scene")
                         Spacer()
-                        Text("\(swState.scene.convertPoint(fromView: hoverLocation!))")
+                        Text("\(appState.scene.convertPoint(fromView: hoverLocation!))")
                     }
                     .padding(.bottom, 10)
                 }

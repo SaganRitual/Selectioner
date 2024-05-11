@@ -4,7 +4,7 @@ import Foundation
 
 extension SpriteWorld {
 
-    class SWSelectionDelegate: SelectionStateDelegate {
+    class SWSelectionDelegate: SelectionerDelegate {
         let scene: SpriteWorld.SWScene
         let selectionBox: SpriteWorld.SWSelectionBox
 
@@ -21,16 +21,23 @@ extension SpriteWorld {
             selectionBox.reset()
         }
 
-        func getObject(at position: CGPoint) -> Gremlin? {
-            nil
+        func getObject(at positionInView: CGPoint) -> (any Selectable)? {
+            var positionInScene = scene.convertPoint(fromView: positionInView)
+            positionInScene.y *= -1
+
+            return scene.rootNode.nodes(at: positionInScene).first as? SWGremlin
         }
 
-        func getObjects(in rectangle: CGRect) -> [Gremlin] {
-            []
+        func getObjects(in rectangle: CGRect) -> [any Selectable] {
+            scene.rootNode.children.compactMap {
+                guard let gremlin = $0 as? SpriteWorld.SWGremlin else { return nil }
+
+                return rectangle.contains(gremlin.position) ? gremlin : nil
+            }
         }
 
-        func select(_ object: Selectable, yesSelect: Bool = false) {
-
+        func select(_ object: Selectable, yesSelect: Bool = true) {
+            scene.select(object, yesSelect: yesSelect)
         }
 
         func tap(at position: CGPoint) {

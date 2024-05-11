@@ -18,13 +18,24 @@ protocol Selectable: AnyObject {
     var isSelected: Bool { get set }
 }
 
-protocol SelectionStateDelegate: AnyObject {
-    
+protocol SelectionerDelegate: AnyObject {
+    func drag(_ objects: [Selectable], startVertex: CGPoint, endVertex: CGPoint)
+    func dragEnd()
+
+    func getObject(at position: CGPoint) -> Selectable?
+    func getObjects(in rectangle: CGRect) -> [Selectable]
+
+    func select(_ object: Selectable, yesSelect: Bool)
+    func tap(at position: CGPoint)
 }
 
-final class SelectionState {
-    var delegate: SpriteWorld.SWSelectionDelegate?
-    var selectedObjects = [Selectable]()
+final class Selectioner {
+    private var delegate: SelectionerDelegate?
+    private var selectedObjects = [Selectable]()
+
+    func setDelegate(_ delegate: SelectionerDelegate) {
+        self.delegate = delegate
+    }
 
     func deselect(_ object: Selectable) {
         assert(selectedObjects.contains { $0 === object })
@@ -61,7 +72,7 @@ final class SelectionState {
     }
 
     func getObject(at position: CGPoint) -> Selectable? {
-        delegate?.getObject(at: position)
+        return delegate?.getObject(at: position)
     }
 
     func getObjects(in rectangle: CGRect) -> [Selectable] {
@@ -84,7 +95,7 @@ final class SelectionState {
         select(tappedObject)
     }
 
-    func select(_ object: Selectable, yesSelect: Bool = false) {
+    func select(_ object: Selectable, yesSelect: Bool = true) {
         if yesSelect {
             if object.isSelected { return }
 
@@ -98,7 +109,7 @@ final class SelectionState {
         delegate?.select(object, yesSelect: yesSelect)
     }
 
-    func select(_ objects: [Selectable], yesSelect: Bool = false) {
+    func select(_ objects: [Selectable], yesSelect: Bool = true) {
         objects.forEach { select($0, yesSelect: yesSelect) }
     }
 

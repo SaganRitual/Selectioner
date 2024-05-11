@@ -15,9 +15,11 @@
 		D40E0E9A2BEDB06200A622FC /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40E0E982BEDB06200A622FC /* String+Extensions.swift */; };
 		D40E0E9B2BEDB06200A622FC /* CoreGraphics+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40E0E992BEDB06200A622FC /* CoreGraphics+Extensions.swift */; };
 		D40E0E9D2BEE73CF00A622FC /* SpriteWorld.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40E0E9C2BEE73CF00A622FC /* SpriteWorld.swift */; };
-		D40E0EA32BEEA7B700A622FC /* SelectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40E0EA22BEEA7B700A622FC /* SelectionState.swift */; };
+		D40E0EA32BEEA7B700A622FC /* Selectioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40E0EA22BEEA7B700A622FC /* Selectioner.swift */; };
 		D40E0EA52BEEF22600A622FC /* SWSelectionBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40E0EA42BEEF22600A622FC /* SWSelectionBox.swift */; };
 		D40E0EA72BEEF95D00A622FC /* SWSelectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40E0EA62BEEF95D00A622FC /* SWSelectionDelegate.swift */; };
+		D40E0EA92BEF081000A622FC /* SWGremlin.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40E0EA82BEF081000A622FC /* SWGremlin.swift */; };
+		D40E0EAB2BEF7B2B00A622FC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40E0EAA2BEF7B2B00A622FC /* AppState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,9 +33,11 @@
 		D40E0E982BEDB06200A622FC /* String+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		D40E0E992BEDB06200A622FC /* CoreGraphics+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CoreGraphics+Extensions.swift"; sourceTree = "<group>"; };
 		D40E0E9C2BEE73CF00A622FC /* SpriteWorld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteWorld.swift; sourceTree = "<group>"; };
-		D40E0EA22BEEA7B700A622FC /* SelectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionState.swift; sourceTree = "<group>"; };
+		D40E0EA22BEEA7B700A622FC /* Selectioner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selectioner.swift; sourceTree = "<group>"; };
 		D40E0EA42BEEF22600A622FC /* SWSelectionBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SWSelectionBox.swift; sourceTree = "<group>"; };
 		D40E0EA62BEEF95D00A622FC /* SWSelectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWSelectionDelegate.swift; sourceTree = "<group>"; };
+		D40E0EA82BEF081000A622FC /* SWGremlin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWGremlin.swift; sourceTree = "<group>"; };
+		D40E0EAA2BEF7B2B00A622FC /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,9 +72,10 @@
 			children = (
 				D40E0E972BEDB05100A622FC /* Extensions */,
 				D40E0E902BEDA4CA00A622FC /* SpriteWorld */,
+				D40E0EAA2BEF7B2B00A622FC /* AppState.swift */,
 				D40E0E812BED9FE700A622FC /* ContentView.swift */,
 				D40E0E7F2BED9FE700A622FC /* SelectionerApp.swift */,
-				D40E0EA22BEEA7B700A622FC /* SelectionState.swift */,
+				D40E0EA22BEEA7B700A622FC /* Selectioner.swift */,
 				D40E0E832BED9FE900A622FC /* Assets.xcassets */,
 				D40E0E882BED9FE900A622FC /* Selectioner.entitlements */,
 				D40E0E852BED9FE900A622FC /* Preview Content */,
@@ -90,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				D40E0E9C2BEE73CF00A622FC /* SpriteWorld.swift */,
+				D40E0EA82BEF081000A622FC /* SWGremlin.swift */,
 				D40E0E912BEDA4D800A622FC /* SWScene.swift */,
 				D40E0EA42BEEF22600A622FC /* SWSelectionBox.swift */,
 				D40E0EA62BEEF95D00A622FC /* SWSelectionDelegate.swift */,
@@ -178,12 +184,14 @@
 			files = (
 				D40E0EA72BEEF95D00A622FC /* SWSelectionDelegate.swift in Sources */,
 				D40E0E9A2BEDB06200A622FC /* String+Extensions.swift in Sources */,
-				D40E0EA32BEEA7B700A622FC /* SelectionState.swift in Sources */,
+				D40E0EA32BEEA7B700A622FC /* Selectioner.swift in Sources */,
 				D40E0EA52BEEF22600A622FC /* SWSelectionBox.swift in Sources */,
 				D40E0E822BED9FE700A622FC /* ContentView.swift in Sources */,
 				D40E0E802BED9FE700A622FC /* SelectionerApp.swift in Sources */,
+				D40E0EAB2BEF7B2B00A622FC /* AppState.swift in Sources */,
 				D40E0E922BEDA4D800A622FC /* SWScene.swift in Sources */,
 				D40E0E9B2BEDB06200A622FC /* CoreGraphics+Extensions.swift in Sources */,
+				D40E0EA92BEF081000A622FC /* SWGremlin.swift in Sources */,
 				D40E0E9D2BEE73CF00A622FC /* SpriteWorld.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
