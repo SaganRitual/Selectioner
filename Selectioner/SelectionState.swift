@@ -18,13 +18,13 @@ protocol Selectable: AnyObject {
     var isSelected: Bool { get set }
 }
 
-final class SelectionState {
-    let scene: SpriteWorld.SWScene
-    var selectedObjects = [Selectable]()
+protocol SelectionStateDelegate: AnyObject {
+    
+}
 
-    init(scene: SpriteWorld.SWScene) {
-        self.scene = scene
-    }
+final class SelectionState {
+    var delegate: SpriteWorld.SWSelectionDelegate?
+    var selectedObjects = [Selectable]()
 
     func deselect(_ object: Selectable) {
         assert(selectedObjects.contains { $0 === object })
@@ -37,10 +37,14 @@ final class SelectionState {
     }
 
     func drag(startVertex: CGPoint, endVertex: CGPoint) {
-        scene.drag(selectedObjects, startVertex: startVertex, endVertex: endVertex)
+        delegate?.drag(selectedObjects, startVertex: startVertex, endVertex: endVertex)
     }
 
     func dragEnd(startVertex: CGPoint, endVertex: CGPoint, shift: Bool = false) {
+        defer {
+            delegate?.dragEnd()
+        }
+
         let containedObjects = getObjects(in: CGRect.zero)
         if containedObjects.isEmpty {
             deselectAll()
@@ -57,17 +61,17 @@ final class SelectionState {
     }
 
     func getObject(at position: CGPoint) -> Selectable? {
-        scene.getObject(at: position)
+        delegate?.getObject(at: position)
     }
 
     func getObjects(in rectangle: CGRect) -> [Selectable] {
-        scene.getObjects(in: rectangle)
+        delegate?.getObjects(in: rectangle) ?? []
     }
 
     func tap(at position: CGPoint, shift: Bool = false) {
         guard let tappedObject = getObject(at: position) else {
             deselectAll()
-            scene.tap(at: position)
+            delegate?.tap(at: position)
             return
         }
 
@@ -91,7 +95,7 @@ final class SelectionState {
             selectedObjects.removeAll { $0 === object }
         }
 
-        scene.select(object, yesSelect: yesSelect)
+        delegate?.select(object, yesSelect: yesSelect)
     }
 
     func select(_ objects: [Selectable], yesSelect: Bool = false) {

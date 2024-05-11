@@ -45,6 +45,7 @@ struct ContentView: View {
                     }
                     .onEnded   { value in
                         hoverLocation = value.location
+                        swState.select.dragEnd(startVertex: value.startLocation, endVertex: value.location)
                     }
             )
 

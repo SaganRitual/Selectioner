@@ -10,8 +10,8 @@ enum SpriteWorld {
         @Published var select: SelectionState
 
         init() {
-            let scene = SpriteWorld.SWScene()
-            let select = SelectionState(scene: scene)
+            let select = SelectionState()
+            let scene = SpriteWorld.SWScene(selectionState: select)
 
             self.scene = scene
             self.select = select

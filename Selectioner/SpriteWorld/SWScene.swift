@@ -4,6 +4,10 @@ import Foundation
 import GameplayKit
 import SpriteKit
 
+final class Gremlin: Selectable {
+    var isSelected: Bool = false
+}
+
 extension SpriteWorld {
     enum SWComponent { }
     enum SWEntity { }
@@ -48,8 +52,20 @@ extension SpriteWorld {
 
         let selectionExtentRoot = SKNode()
         var selectionExtentSprites = [SKSpriteNode]()
-        var selectionerView: SelectionerView!
+        var selectionBox: SWSelectionBox!
 
+        var selectionDelegate: SWSelectionDelegate?
+        let selectionState: SelectionState
+
+        init(selectionState: SelectionState) {
+            self.selectionState = selectionState
+            super.init(size: .zero)
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
         override func didMove(to view: SKView) {
             scaleMode = .resizeFill
             backgroundColor = .black
@@ -62,45 +78,32 @@ extension SpriteWorld {
             cameraNode.position = CGPoint.zero
             cameraNode.setScale(cameraScale)
 
-            setupSelectionerView()
+            setupSelectionHandling()
         }
     }
 
 }
 
-final class Gremlin: Selectable {
-    var isSelected: Bool = false
-}
-
 extension SpriteWorld.SWScene {
+    func addGremlin(at position: CGPoint) {
+        let coin = [0, 1, 2, 3].randomElement()!
+        let spriteNames = ["spaceman", "flapper", "cyclops", "grouch"]
 
-    func drag(_ objects: [Selectable], startVertex: CGPoint, endVertex: CGPoint) {
-        selectionerView.drawRubberBand(from: startVertex, to: endVertex)
+        let sprite = SKSpriteNode(imageNamed: spriteNames[coin])
+
+        sprite.position = convertPoint(fromView: position)
+        sprite.position.y *= -1
+
+        rootNode.addChild(sprite)
     }
-
-    func getObject(at position: CGPoint) -> Gremlin? {
-        nil
-    }
-
-    func getObjects(in rectangle: CGRect) -> [Gremlin] {
-        []
-    }
-
-    func select(_ object: Selectable, yesSelect: Bool = false) {
-
-    }
-
-    func tap(at position: CGPoint) {
-    }
-
 }
 
 private extension SpriteWorld.SWScene {
 
-    func setupSelectionerView() {
+    func setupSelectionHandling() {
         rootNode.addChild(selectionExtentRoot)
 
-        self.selectionExtentSprites = SelectionerView.Directions.allCases.map { ss in
+        self.selectionExtentSprites = SpriteWorld.SWSelectionBox.Directions.allCases.map { ss in
             let sprite = SKSpriteNode(imageNamed: "pixel_1x1")
 
             sprite.alpha = 0.7
@@ -114,10 +117,14 @@ private extension SpriteWorld.SWScene {
             return sprite
         }
 
-        selectionerView = SelectionerView(
+        selectionBox = SpriteWorld.SWSelectionBox(
             scene: self,
             selectionExtentRoot: selectionExtentRoot,
             selectionExtentSprites: selectionExtentSprites
+        )
+
+        selectionState.delegate = SpriteWorld.SWSelectionDelegate(
+            scene: self, selectionBox: selectionBox
         )
     }
 
