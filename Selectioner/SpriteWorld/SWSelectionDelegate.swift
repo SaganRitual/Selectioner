@@ -4,7 +4,7 @@ import Foundation
 
 extension SpriteWorld {
 
-    class SWSelectionDelegate: UserInputDelegate {
+    class SWSelectionDelegate: SelectionDelegate {
         enum DragState {
             case none, drawingMarquee, draggingObjects
         }

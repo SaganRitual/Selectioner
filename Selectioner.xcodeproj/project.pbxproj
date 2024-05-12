@@ -38,6 +38,7 @@
 		D40E0EA62BEEF95D00A622FC /* SWSelectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWSelectionDelegate.swift; sourceTree = "<group>"; };
 		D40E0EA82BEF081000A622FC /* SWGremlin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWGremlin.swift; sourceTree = "<group>"; };
 		D40E0EAA2BEF7B2B00A622FC /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		D40E0EAC2BF03BAB00A622FC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +55,7 @@
 		D40E0E732BED9FE700A622FC = {
 			isa = PBXGroup;
 			children = (
+				D40E0EAC2BF03BAB00A622FC /* README.md */,
 				D40E0E7E2BED9FE700A622FC /* Selectioner */,
 				D40E0E7D2BED9FE700A622FC /* Products */,
 			);
@@ -74,8 +76,8 @@
 				D40E0E902BEDA4CA00A622FC /* SpriteWorld */,
 				D40E0EAA2BEF7B2B00A622FC /* AppState.swift */,
 				D40E0E812BED9FE700A622FC /* ContentView.swift */,
-				D40E0E7F2BED9FE700A622FC /* SelectionerApp.swift */,
 				D40E0EA22BEEA7B700A622FC /* Selectioner.swift */,
+				D40E0E7F2BED9FE700A622FC /* SelectionerApp.swift */,
 				D40E0E832BED9FE900A622FC /* Assets.xcassets */,
 				D40E0E882BED9FE900A622FC /* Selectioner.entitlements */,
 				D40E0E852BED9FE900A622FC /* Preview Content */,

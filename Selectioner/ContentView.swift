@@ -134,6 +134,7 @@ struct ContentView: View {
             }
             .monospaced()
             .frame(width: 300)
+            .padding()
         }
     }
 }

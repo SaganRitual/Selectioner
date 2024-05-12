@@ -58,3 +58,15 @@ extension CGSize {
 
     init(_ position: CGPoint) { self.init(width: position.x, height: position.y) }
 }
+
+extension CGRect {
+    init(startVertex: CGPoint, endVertex: CGPoint) {
+        self.init(
+            origin: startVertex,
+            size: CGSize(
+                width: abs(endVertex.x - startVertex.x),
+                height: abs(endVertex.y - startVertex.y)
+            )
+        )
+    }
+}
