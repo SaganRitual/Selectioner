@@ -9,3 +9,5 @@ more-or-less like one might expect:
 - Drag a gremlin to move it and all selected gremlins
 - Shift-click a gremlin to toggle its selection state without affecting others
 - Shift-drag-select to toggle state of gremlins in box without affecting others
+
+![](https://github.com/SaganRitual/Selectioner/blob/main/demo.gif)
